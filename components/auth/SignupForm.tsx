@@ -20,6 +20,8 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z
 	.object({
@@ -46,6 +48,7 @@ const FormSchema = z
 	});
 
 export default function SignupForm() {
+	const router = useRouter();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -57,8 +60,23 @@ export default function SignupForm() {
 		},
 	});
 
-	function submitHandler(data: z.infer<typeof FormSchema>) {
-		console.log(data);
+	async function submitHandler(data: z.infer<typeof FormSchema>) {
+		try {
+			const result = await signIn("credentials", {
+				redirect: false,
+				name: data.name,
+				phone: data.phone,
+				username: data.username,
+				password: data.password,
+				action: "sign-up",
+			});
+
+			if (result) {
+				router.push("/");
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return (

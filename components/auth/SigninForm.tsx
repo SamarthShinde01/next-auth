@@ -7,7 +7,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -22,6 +21,8 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	username: z
@@ -36,6 +37,7 @@ const formSchema = z.object({
 });
 
 export default function SigninForm() {
+	const router = useRouter();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -44,8 +46,21 @@ export default function SigninForm() {
 		},
 	});
 
-	function signinHandler(data: z.infer<typeof formSchema>) {
-		console.log(data);
+	async function signinHandler(data: z.infer<typeof formSchema>) {
+		try {
+			const res = await signIn("credentials", {
+				redirect: false,
+				username: data.username,
+				password: data.password,
+				action: "sign-in",
+			});
+
+			if (res) {
+				router.push("/");
+			}
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return (
@@ -102,6 +117,7 @@ export default function SigninForm() {
 							/>
 						</div>
 
+						<input type="hidden" name="action" value="sign-in" />
 						<Button
 							className="w-full bg-slate-900 hover:bg-slate-800 "
 							type="submit"
