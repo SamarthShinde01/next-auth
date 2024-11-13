@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone the internal repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v1
 
       - name: Install nodejs
         uses: actions/setup-node@v3
@@ -18,7 +18,7 @@ jobs:
           node-version: "20"
 
       - name: Install Dependencies
-        run: npm run install
+        run: npm install
 
       - name: Run Build
         run: npm run build
