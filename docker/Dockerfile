@@ -14,5 +14,4 @@ ENV NEXTAUTH_SECRET=I5n49cHZUdvBBCsI2AmtOKxf+dgYmbyYbqOyRgXKciI=
 ENV DATABASE_URL="postgresql://neondb_owner:dexRUn3lg6vy@ep-sparkling-flower-a5rqhdzn.us-east-2.aws.neon.tech/test-use?sslmode=require"
 RUN npm run build
 
-EXPOSE 3005 
 CMD [ "npm","run","start" ]
