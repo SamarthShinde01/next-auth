@@ -1,4 +1,4 @@
-name: Buid and Deploy to Docker hub
+name: Buid and Deploy to Docker Hub
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
           tags: samarthshinde/nextauth-app:latest
 
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.1.0
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
