@@ -28,3 +28,15 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: samarthshinde/nextauth-app:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo docker pull samarthshinde/nextauth-app:latest
+            sudo docker stop nextauth-app || true
+            sudo docker rm nextauth-app || true
+            sudo docker run -d --name nextauth-app -p 3005:3005 samarthshinde/nextauth-app:latest
